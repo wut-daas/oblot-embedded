@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<mavlink>
+  <!-- MAVLink HEARBEAT and PROTOCOL VERSION messages -->
+  <include>minimal.xml</include>
+  <!-- MAVLink parameter microservice -->
+  <include>services.xml</include>
+  <!-- Number unique for ARCHER dialect, guidelines in docs TBD -->
+  <dialect>44</dialect>
+  <enums>
+    <enum name="ARCHER_STATE">
+      <description>System status and taken measurements bitfield.</description>
+      <entry value="1" name="ARCHER_STATE_MAINBOARD_OK">
+        <description>Mainboard main program working.</description>
+      </entry>
+      <entry value="2" name="ARCHER_STATE_POWERBOARD_OK">
+        <description>Powerboard main program working.</description>
+      </entry>
+      <entry value="4" name="ARCHER_STATE_MEASURING_BATTERY">
+        <description>Battery measured recently.</description>
+      </entry>
+      <entry value="8" name="ARCHER_STATE_MEASURING_RPM">
+        <description>RPM measured recently.</description>
+      </entry>
+      <entry value="16" name="ARCHER_STATE_MEASURING_TEMPERATURE">
+        <description>Temperature measured recently.</description>
+      </entry>
+      <entry value="32" name="ARCHER_STATE_MEASURING_ANGLE">
+        <description>Angle measured recently.</description>
+      </entry>
+      <entry value="64" name="ARCHER_STATE_MEASURING_AERODYNAMIC">
+        <description>Aerodynamic conditions measured recently.</description>
+      </entry>
+      <entry value="1024" name="ARCHER_STATE_SYNC_PWM">
+        <description>Synchronising PWM from autopilot available.</description>
+      </entry>
+    </enum>
+    <enum name="ARCHER_TEMPERATURE_LOCATION">
+      <description>Location of helicopter at which temperature is measured</description>
+      <entry value="0" name="ARCHER_TEMPERATURE_LOCATION_UNKNOWN">
+        <description>Temperature is measured at an unknown location</description>
+      </entry>
+      <entry value="1" name="ARCHER_TEMPERATURE_LOCATION_AMBIENT">
+        <description>Temperature of ambient air</description>
+      </entry>
+      <entry value="10" name="ARCHER_TEMPERATURE_LOCATION_MOTOR_MAIN">
+        <description>Temperature of main motor</description>
+      </entry>
+      <entry value="11" name="ARCHER_TEMPERATURE_LOCATION_MOTOR_TAIL1">
+        <description>Temperature of 1st tail motor</description>
+      </entry>
+      <entry value="12" name="ARCHER_TEMPERATURE_LOCATION_MOTOR_TAIL2">
+        <description>Temperature of 2nd tail motor</description>
+      </entry>
+    </enum>
+    <enum name="ARCHER_ANGLE">
+      <description>Identifier which angle is measured by this encoder</description>
+      <entry value="0" name="ARCHER_ANGLE_UNKNOWN">
+        <description>Unknown angle is measured</description>
+      </entry>
+      <entry value="1" name="ARCHER_ANGLE_SWASHPLATE1">
+        <description>Angle of swashplate actuator 1, positive increasing thrust.</description>
+      </entry>
+      <entry value="2" name="ARCHER_ANGLE_SWASHPLATE2">
+        <description>Angle of swashplate actuator 2, positive increasing thrust.</description>
+      </entry>
+      <entry value="3" name="ARCHER_ANGLE_SWASHPLATE3">
+        <description>Angle of swashplate actuator 3, positive increasing thrust.</description>
+      </entry>
+      <entry value="4" name="ARCHER_ANGLE_TAIL1">
+        <description>Angle of tail actuator 1, positive increasing thrust.</description>
+      </entry>
+      <entry value="5" name="ARCHER_ANGLE_TAIL2">
+        <description>Angle of tail actuator 2, positive increasing thrust.</description>
+      </entry>
+      <entry value="6" name="ARCHER_ANGLE_WING">
+        <description>Incidence angle of wing, positive increasing lift.</description>
+      </entry>
+      <entry value="7" name="ARCHER_ANGLE_ELEVATOR">
+        <description>Angle of elevator, positive increasing lift.</description>
+      </entry>
+      <entry value="8" name="ARCHER_ANGLE_RUDDER">
+        <description>Angle of rudder, positive turning clockwise when viewed from above.</description>
+      </entry>
+    </enum>
+  </enums>
+  <messages>
+    <message id="44000" name="ARCHER_HEARTBEAT">
+      <wip/>
+      <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
+      <description>Custom heartbeat/status information</description>
+      <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
+      <field type="uint16_t" name="status" enum="ARCHER_STATE">See the ARCHER_STATE enum.</field>
+      <field type="uint16_t" name="sync_pwm" units="us">Synchronising PWM from autopilot value.</field>
+    </message>
+    <message id="44001" name="ARCHER_FULL">
+      <wip/>
+      <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
+      <description>Meant for use where auto-generated mavlink libraries cannot be deployed. Most important data from other message consolidated to be sent as a single packet. Should have fixed length (prevent truncation).</description>
+      <field type="uint16_t" name="voltage" units="mV">Battery voltage.</field>
+      <field type="uint16_t" name="current" units="cA">Current consumed from battery.</field>
+      <field type="uint16_t" name="rpm_main" units="rpm">Main motor revolutions per minute</field>
+    </message>
+    <message id="44002" name="ARCHER_BATTERY">
+      <description>Battery and power consumption information. All currents should be measured at battery output.</description>
+      <field type="uint16_t" name="voltage" units="mV">Battery voltage.</field>
+      <field type="uint16_t" name="current_motor_main" units="cA">Current consumed by main motor.</field>
+      <field type="uint16_t" name="current_motor_tail1" units="cA">Current consumed by 1st tail motor.</field>
+      <field type="uint16_t" name="current_motor_tail2" units="cA">Current consumed by 2nd tail motor.</field>
+      <field type="uint16_t" name="current_servo" units="cA">Current consumed by servomechanism power rail.</field>
+      <field type="uint16_t" name="current_avio" units="cA">Current consumed by avionics power rail.</field>
+    </message>
+    <message id="44003" name="ARCHER_RPM">
+      <description>Rotation speed of connected motors.</description>
+      <field type="uint16_t" name="rpm_main" units="rpm">Main motor revolutions per minute</field>
+      <field type="uint16_t" name="rpm_tail1" units="rpm">1st tail motor revolutions per minute</field>
+      <field type="uint16_t" name="rpm_tail2" units="rpm">2nd tail motor revolutions per minute</field>
+    </message>
+    <message id="44004" name="ARCHER_TEMPERATURE">
+      <description>Temperature measured by a single sensor.</description>
+      <field type="uint8_t" name="location" enum="ARCHER_TEMPERATURE_LOCATION">See the ARCHER_TEMPERATURE_LOCATION enum.</field>
+      <field type="int16_t" name="temperature" units="cdegC">Measured temperature.</field>
+    </message>
+    <message id="44005" name="ARCHER_ANGLE">
+      <description>Angle measured by a single encoder.</description>
+      <field type="uint8_t" name="location" enum="ARCHER_TEMPERATURE_LOCATION">See the ARCHER_ANGLE enum.</field>
+      <field type="int16_t" name="angle" units="cdeg">Measured angle.</field>
+    </message>
+    <!-- 44006 RESERVED for aerodynamic measurements -->
+  </messages>
+</mavlink>
