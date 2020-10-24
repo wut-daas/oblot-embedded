@@ -4,6 +4,7 @@
   <version>3</version>
   <dialect>0</dialect>
   <enums>
+    <!-- Parameter service enumeration -->
     <enum name="MAV_PARAM_TYPE">
       <description>Specifies the datatype of a MAVLink parameter.</description>
       <entry value="1" name="MAV_PARAM_TYPE_UINT8">
@@ -37,8 +38,108 @@
         <description>64-bit floating-point</description>
       </entry>
     </enum>
+    <!-- Command service enumeration -->
+    <enum name="MAV_FRAME">
+      <entry value="0" name="MAV_FRAME_GLOBAL">
+        <description>Global (WGS84) coordinate frame + MSL altitude. First value / x: latitude, second value / y: longitude, third value / z: positive altitude over mean sea level (MSL).</description>
+      </entry>
+      <entry value="1" name="MAV_FRAME_LOCAL_NED">
+        <description>Local coordinate frame, Z-down (x: North, y: East, z: Down).</description>
+      </entry>
+      <entry value="2" name="MAV_FRAME_MISSION">
+        <description>NOT a coordinate frame, indicates a mission command.</description>
+      </entry>
+      <entry value="3" name="MAV_FRAME_GLOBAL_RELATIVE_ALT">
+        <description>Global (WGS84) coordinate frame + altitude relative to the home position. First value / x: latitude, second value / y: longitude, third value / z: positive altitude with 0 being at the altitude of the home location.</description>
+      </entry>
+      <entry value="4" name="MAV_FRAME_LOCAL_ENU">
+        <description>Local coordinate frame, Z-up (x: East, y: North, z: Up).</description>
+      </entry>
+      <entry value="5" name="MAV_FRAME_GLOBAL_INT">
+        <description>Global (WGS84) coordinate frame (scaled) + MSL altitude. First value / x: latitude in degrees*1.0e-7, second value / y: longitude in degrees*1.0e-7, third value / z: positive altitude over mean sea level (MSL).</description>
+      </entry>
+      <entry value="6" name="MAV_FRAME_GLOBAL_RELATIVE_ALT_INT">
+        <description>Global (WGS84) coordinate frame (scaled) + altitude relative to the home position. First value / x: latitude in degrees*10e-7, second value / y: longitude in degrees*10e-7, third value / z: positive altitude with 0 being at the altitude of the home location.</description>
+      </entry>
+      <entry value="7" name="MAV_FRAME_LOCAL_OFFSET_NED">
+        <description>Offset to the current local frame. Anything expressed in this frame should be added to the current local frame position.</description>
+      </entry>
+      <entry value="8" name="MAV_FRAME_BODY_NED">
+        <deprecated since="2019-08" replaced_by="MAV_FRAME_BODY_FRD"/>
+        <description>Setpoint in body NED frame. This makes sense if all position control is externalized - e.g. useful to command 2 m/s^2 acceleration to the right.</description>
+      </entry>
+      <entry value="9" name="MAV_FRAME_BODY_OFFSET_NED">
+        <deprecated since="2019-08" replaced_by="MAV_FRAME_BODY_FRD"/>
+        <description>Offset in body NED frame. This makes sense if adding setpoints to the current flight path, to avoid an obstacle - e.g. useful to command 2 m/s^2 acceleration to the east.</description>
+      </entry>
+      <entry value="10" name="MAV_FRAME_GLOBAL_TERRAIN_ALT">
+        <description>Global (WGS84) coordinate frame with AGL altitude (at the waypoint coordinate). First value / x: latitude in degrees, second value / y: longitude in degrees, third value / z: positive altitude in meters with 0 being at ground level in terrain model.</description>
+      </entry>
+      <entry value="11" name="MAV_FRAME_GLOBAL_TERRAIN_ALT_INT">
+        <description>Global (WGS84) coordinate frame (scaled) with AGL altitude (at the waypoint coordinate). First value / x: latitude in degrees*10e-7, second value / y: longitude in degrees*10e-7, third value / z: positive altitude in meters with 0 being at ground level in terrain model.</description>
+      </entry>
+      <entry value="12" name="MAV_FRAME_BODY_FRD">
+        <description>Body fixed frame of reference, Z-down (x: Forward, y: Right, z: Down).</description>
+      </entry>
+      <entry value="13" name="MAV_FRAME_RESERVED_13">
+        <deprecated since="2019-04" replaced_by=""/>
+        <description>MAV_FRAME_BODY_FLU - Body fixed frame of reference, Z-up (x: Forward, y: Left, z: Up).</description>
+      </entry>
+      <entry value="14" name="MAV_FRAME_RESERVED_14">
+        <deprecated since="2019-04" replaced_by="MAV_FRAME_LOCAL_FRD"/>
+        <description>MAV_FRAME_MOCAP_NED - Odometry local coordinate frame of data given by a motion capture system, Z-down (x: North, y: East, z: Down).</description>
+      </entry>
+      <entry value="15" name="MAV_FRAME_RESERVED_15">
+        <deprecated since="2019-04" replaced_by="MAV_FRAME_LOCAL_FLU"/>
+        <description>MAV_FRAME_MOCAP_ENU - Odometry local coordinate frame of data given by a motion capture system, Z-up (x: East, y: North, z: Up).</description>
+      </entry>
+      <entry value="16" name="MAV_FRAME_RESERVED_16">
+        <deprecated since="2019-04" replaced_by="MAV_FRAME_LOCAL_FRD"/>
+        <description>MAV_FRAME_VISION_NED - Odometry local coordinate frame of data given by a vision estimation system, Z-down (x: North, y: East, z: Down).</description>
+      </entry>
+      <entry value="17" name="MAV_FRAME_RESERVED_17">
+        <deprecated since="2019-04" replaced_by="MAV_FRAME_LOCAL_FLU"/>
+        <description>MAV_FRAME_VISION_ENU - Odometry local coordinate frame of data given by a vision estimation system, Z-up (x: East, y: North, z: Up).</description>
+      </entry>
+      <entry value="18" name="MAV_FRAME_RESERVED_18">
+        <deprecated since="2019-04" replaced_by="MAV_FRAME_LOCAL_FRD"/>
+        <description>MAV_FRAME_ESTIM_NED - Odometry local coordinate frame of data given by an estimator running onboard the vehicle, Z-down (x: North, y: East, z: Down).</description>
+      </entry>
+      <entry value="19" name="MAV_FRAME_RESERVED_19">
+        <deprecated since="2019-04" replaced_by="MAV_FRAME_LOCAL_FLU"/>
+        <description>MAV_FRAME_ESTIM_ENU - Odometry local coordinate frame of data given by an estimator running onboard the vehicle, Z-up (x: East, y: North, z: Up).</description>
+      </entry>
+      <entry value="20" name="MAV_FRAME_LOCAL_FRD">
+        <description>Forward, Right, Down coordinate frame. This is a local frame with Z-down and arbitrary F/R alignment (i.e. not aligned with NED/earth frame).</description>
+      </entry>
+      <entry value="21" name="MAV_FRAME_LOCAL_FLU">
+        <description>Forward, Left, Up coordinate frame. This is a local frame with Z-up and arbitrary F/L alignment (i.e. not aligned with ENU/earth frame).</description>
+      </entry>
+    </enum>
+    <enum name="MAV_RESULT">
+      <description>Result from a MAVLink command (MAV_CMD)</description>
+      <entry value="0" name="MAV_RESULT_ACCEPTED">
+        <description>Command is valid (is supported and has valid parameters), and was executed.</description>
+      </entry>
+      <entry value="1" name="MAV_RESULT_TEMPORARILY_REJECTED">
+        <description>Command is valid, but cannot be executed at this time. This is used to indicate a problem that should be fixed just by waiting (e.g. a state machine is busy, can't arm because have not got GPS lock, etc.). Retrying later should work.</description>
+      </entry>
+      <entry value="2" name="MAV_RESULT_DENIED">
+        <description>Command is invalid (is supported but has invalid parameters). Retrying same command and parameters will not work.</description>
+      </entry>
+      <entry value="3" name="MAV_RESULT_UNSUPPORTED">
+        <description>Command is not supported (unknown).</description>
+      </entry>
+      <entry value="4" name="MAV_RESULT_FAILED">
+        <description>Command is valid, but execution has failed. This is used to indicate any non-temporary or unexpected problem, i.e. any problem that must be fixed before the command can succeed/be retried. For example, attempting to write a file when out of memory, attempting to arm when sensors are not calibrated, etc.</description>
+      </entry>
+      <entry value="5" name="MAV_RESULT_IN_PROGRESS">
+        <description>Command is valid and is being executed. This will be followed by further progress updates, i.e. the component may send further COMMAND_ACK messages with result MAV_RESULT_IN_PROGRESS (at a rate decided by the implementation), and must terminate by sending a COMMAND_ACK message with final result of the operation. The COMMAND_ACK.progress field can be used to indicate the progress of the operation. There is no need for the sender to retry the command, but if done during execution, the component will return MAV_RESULT_IN_PROGRESS with an updated progress.</description>
+      </entry>
+    </enum>
   </enums>
   <messages>
+    <!-- Parameter service messages -->
     <message id="20" name="PARAM_REQUEST_READ">
       <description>Request to read the onboard parameter with the param_id string id. Onboard parameters are stored as key[const char*] -&gt; value[float]. This allows to send a parameter to any other component (such as the GCS) without the need of previous knowledge of possible parameter names. Thus the same GCS can store different parameters for different autopilots. See also https://mavlink.io/en/services/parameter.html for a full documentation of QGroundControl and IMU code.</description>
       <field type="uint8_t" name="target_system">System ID</field>
@@ -66,6 +167,55 @@
       <field type="char[16]" name="param_id">Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string</field>
       <field type="float" name="param_value">Onboard parameter value</field>
       <field type="uint8_t" name="param_type" enum="MAV_PARAM_TYPE">Onboard parameter type.</field>
+    </message>
+    <!-- Command service messages -->
+    <message id="75" name="COMMAND_INT">
+      <description>Message encoding a command with parameters as scaled integers. Scaling depends on the actual command value. The command microservice is documented at https://mavlink.io/en/services/command.html</description>
+      <field type="uint8_t" name="target_system">System ID</field>
+      <field type="uint8_t" name="target_component">Component ID</field>
+      <field type="uint8_t" name="frame" enum="MAV_FRAME">The coordinate system of the COMMAND.</field>
+      <field type="uint16_t" name="command" enum="MAV_CMD">The scheduled action for the mission item.</field>
+      <field type="uint8_t" name="current">false:0, true:1</field>
+      <field type="uint8_t" name="autocontinue">autocontinue to next wp</field>
+      <field type="float" name="param1">PARAM1, see MAV_CMD enum</field>
+      <field type="float" name="param2">PARAM2, see MAV_CMD enum</field>
+      <field type="float" name="param3">PARAM3, see MAV_CMD enum</field>
+      <field type="float" name="param4">PARAM4, see MAV_CMD enum</field>
+      <field type="int32_t" name="x">PARAM5 / local: x position in meters * 1e4, global: latitude in degrees * 10^7</field>
+      <field type="int32_t" name="y">PARAM6 / local: y position in meters * 1e4, global: longitude in degrees * 10^7</field>
+      <field type="float" name="z">PARAM7 / z position: global: altitude in meters (relative or absolute, depending on frame).</field>
+    </message>
+    <message id="76" name="COMMAND_LONG">
+      <description>Send a command with up to seven parameters to the MAV. The command microservice is documented at https://mavlink.io/en/services/command.html</description>
+      <field type="uint8_t" name="target_system">System which should execute the command</field>
+      <field type="uint8_t" name="target_component">Component which should execute the command, 0 for all components</field>
+      <field type="uint16_t" name="command" enum="MAV_CMD">Command ID (of command to send).</field>
+      <field type="uint8_t" name="confirmation">0: First transmission of this command. 1-255: Confirmation transmissions (e.g. for kill command)</field>
+      <field type="float" name="param1">Parameter 1 (for the specific command).</field>
+      <field type="float" name="param2">Parameter 2 (for the specific command).</field>
+      <field type="float" name="param3">Parameter 3 (for the specific command).</field>
+      <field type="float" name="param4">Parameter 4 (for the specific command).</field>
+      <field type="float" name="param5">Parameter 5 (for the specific command).</field>
+      <field type="float" name="param6">Parameter 6 (for the specific command).</field>
+      <field type="float" name="param7">Parameter 7 (for the specific command).</field>
+    </message>
+    <message id="77" name="COMMAND_ACK">
+      <description>Report status of a command. Includes feedback whether the command was executed. The command microservice is documented at https://mavlink.io/en/services/command.html</description>
+      <field type="uint16_t" name="command" enum="MAV_CMD">Command ID (of acknowledged command).</field>
+      <field type="uint8_t" name="result" enum="MAV_RESULT">Result of command.</field>
+      <extensions/>
+      <field type="uint8_t" name="progress">WIP: Also used as result_param1, it can be set with a enum containing the errors reasons of why the command was denied or the progress percentage or 255 if unknown the progress when result is MAV_RESULT_IN_PROGRESS.</field>
+      <field type="int32_t" name="result_param2">WIP: Additional parameter of the result, example: which parameter of MAV_CMD_NAV_WAYPOINT caused it to be denied.</field>
+      <field type="uint8_t" name="target_system">WIP: System which requested the command to be executed</field>
+      <field type="uint8_t" name="target_component">WIP: Component which requested the command to be executed</field>
+    </message>
+    <message id="80" name="COMMAND_CANCEL">
+      <wip/>
+      <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
+      <description>Cancel a long running command. The target system should respond with a COMMAND_ACK to the original command with result=MAV_RESULT_CANCELLED if the long running process was cancelled. If it has already completed, the cancel action can be ignored. The cancel action can be retried until some sort of acknowledgement to the original command has been received. The command microservice is documented at https://mavlink.io/en/services/command.html</description>
+      <field type="uint8_t" name="target_system">System executing long running command. Should not be broadcast (0).</field>
+      <field type="uint8_t" name="target_component">Component executing long running command.</field>
+      <field type="uint16_t" name="command" enum="MAV_CMD">Command ID (of command to cancel).</field>
     </message>
   </messages>
 </mavlink>
