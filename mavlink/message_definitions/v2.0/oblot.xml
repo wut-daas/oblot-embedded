@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<mavlink>
+  <!-- MAVLink HEARBEAT and PROTOCOL VERSION messages -->
+  <include>minimal.xml</include>
+  <!-- MAVLink parameter and command microservices -->
+  <include>services.xml</include>
+  <!-- Custom messages developed for ARCHER helicopter -->
+  <include>archer.xml</include>
+  <!-- Number unique for ARCHER & OBLOT dialect, guidelines in docs TBD -->
+  <dialect>44</dialect>
+  <enums>
+    <enum name="MAV_CMD">
+      <description>Commands to be executed by the MAV. They can be executed on user request, or as part of a mission script. If the action is used in a mission, the parameter mapping to the waypoint/mission message is as follows: Param 1, Param 2, Param 3, Param 4, X: Param 5, Y:Param 6, Z:Param 7. This command list is similar what ARINC 424 is for commercial aircraft: A data format how to interpret waypoint/mission data.</description>
+      <!-- For ease of use, do not repeat ids betweend commands and messages -->
+      <entry value="44101" name="MAV_CMD_DO_DYNO_TARE" hasLocation="false" isDestination="false">
+        <description>Set zero force offset either to current reading or a specified value</description>
+        <param index="1" label="Use Current" minValue="0" maxValue="1" increment="1">Measure and use current value (1=use current reading, 0=use specified value)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5" label="Raw Offset">Value read for zero force applied (ADC value, not force in SI units)</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+    </enum>
+  </enums>
+  <messages>
+    <!-- For ease of use, do not repeat ids betweend commands and messages -->
+    <message id="44102" name="OBLOT_DYNO_FORCE">
+      <wip/>
+      <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
+      <description>Force measured by a load cell</description>
+      <field type="uint8_t" name="location" units="ms">Sensor identifier, maybe rework to an enum</field>
+      <field type="float" name="force" units="kg">Offset and scaled value in kilograms</field>
+      <field type="uint32_t" name="force_raw">Raw reading from load cell amplifier</field>
+    </message>
+  </messages>
+</mavlink>
