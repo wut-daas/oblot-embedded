@@ -52,7 +52,7 @@
       <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
       <field type="uint8_t" name="motor_id">Motor identifier, maybe rework to an enum.</field>
       <field type="uint16_t" name="throttle_pwm" units="us">Control signal pulse width.</field>
-      <field type="uint16_t" name="rpm" uints="rpm">Motor revolutions per minute.</field>
+      <field type="uint16_t" name="rpm" units="rpm">Motor revolutions per minute.</field>
     </message>
     <message id="44104" name="OBLOT_DYNO_POWER">
       <wip/>
