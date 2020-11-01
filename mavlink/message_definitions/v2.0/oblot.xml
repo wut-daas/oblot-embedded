@@ -11,7 +11,7 @@
   <enums>
     <enum name="MAV_CMD">
       <description>Commands to be executed by the MAV. They can be executed on user request, or as part of a mission script. If the action is used in a mission, the parameter mapping to the waypoint/mission message is as follows: Param 1, Param 2, Param 3, Param 4, X: Param 5, Y:Param 6, Z:Param 7. This command list is similar what ARINC 424 is for commercial aircraft: A data format how to interpret waypoint/mission data.</description>
-      <!-- For ease of use, do not repeat ids betweend commands and messages -->
+      <!-- For clarity, do not repeat ids betweend commands and messages -->
       <entry value="44101" name="MAV_CMD_DO_DYNO_TARE" hasLocation="false" isDestination="false">
         <description>Set zero force offset either to current reading or a specified value</description>
         <param index="1" label="Use Current" minValue="0" maxValue="1" increment="1">Measure and use current value (1=use current reading, 0=use specified value)</param>
@@ -22,17 +22,45 @@
         <param index="6">Empty</param>
         <param index="7">Empty</param>
       </entry>
+      <entry value="44105" name="MAV_CMD_DO_SET_MOTOR" hasLocation="false" isDestination="false">
+        <description>Set motor control signal</description>
+        <param index="1" label="MotorID">Motor identifier, corresponding to OBLOT_DYNO_MOTOR</param>
+        <param index="2" label="Type" minValue="3" maxValue="7" increment="1">Select type of motor command from following parameters</param>
+        <param index="3" label="PWM" units="us">Control PWM signal width in microseconds</param>
+        <param index="4" label="Throttle">Throttle percent</param>
+        <param index="5" label="RPM" units="rpm">Desired rotations per minute</param>
+        <param index="6" label="Current" units="A">Desired current draw</param>
+        <param index="7" label="Thrust" units="kg">Desired motor thrust</param>
+      </entry>
     </enum>
   </enums>
   <messages>
-    <!-- For ease of use, do not repeat ids betweend commands and messages -->
+    <!-- For clarity, do not repeat ids betweend commands and messages -->
     <message id="44102" name="OBLOT_DYNO_FORCE">
       <wip/>
       <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
       <description>Force measured by a load cell</description>
-      <field type="uint8_t" name="location" units="ms">Sensor identifier, maybe rework to an enum</field>
-      <field type="float" name="force" units="kg">Offset and scaled value in kilograms</field>
-      <field type="uint32_t" name="force_raw">Raw reading from load cell amplifier</field>
+      <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
+      <field type="uint8_t" name="cell_id">Sensor identifier, maybe rework to an enum.</field>
+      <field type="float" name="force" units="kg">Offset and scaled value in kilograms.</field>
+      <field type="uint32_t" name="force_raw">Raw reading from load cell amplifier.</field>
+    </message>
+    <message id="44103" name="OBLOT_DYNO_MOTOR">
+      <wip/>
+      <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
+      <description>Information on a motor state</description>
+      <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
+      <field type="uint8_t" name="motor_id">Motor identifier, maybe rework to an enum.</field>
+      <field type="uint16_t" name="throttle_pwm" units="us">Control signal pulse width.</field>
+      <field type="uint16_t" name="rpm" uints="rpm">Motor revolutions per minute.</field>
+    </message>
+    <message id="44104" name="OBLOT_DYNO_POWER">
+      <wip/>
+      <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
+      <description>Power consumption information</description>
+      <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
+      <field type="uint16_t" name="voltage" units="mV">Source voltage.</field>
+      <field type="uint16_t" name="current" units="cA">Current consumed from source.</field>
     </message>
   </messages>
 </mavlink>
