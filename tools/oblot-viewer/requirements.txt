@@ -1,5 +1,6 @@
 # tkinter.TkVersion==8.6 # Not installable by pip, may require setting TK_LIBRARY, TKPATH, TCL_LIBRARY variables in venv
 future==0.18.2
-lxml==4.5.2
-pymavlink==2.4.9
+lxml==4.6.1
+pymavlink==2.4.12
 pyserial==3.4
+requests==2.24.0
