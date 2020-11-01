@@ -2,7 +2,7 @@
 
 Libraries and conventions used in electronic devices developed for OBLOT research centre
 
-[![pipeline status](https://gitlab.com/wut-daas/oblot-embedded/badges/master/pipeline.svg)](https://gitlab.com/Maarrk/ci-tutorial/commits/master)
+[![pipeline status](https://gitlab.com/wut-daas/oblot-embedded/badges/master/pipeline.svg)](https://gitlab.com/wut-daas/oblot-embedded/commits/master)
 
 ---
 
