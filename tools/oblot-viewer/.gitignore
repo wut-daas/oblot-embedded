@@ -1,3 +1,6 @@
+# Private configuration files
+.env
+
 # Standard gitignore for Python
 # https://github.com/github/gitignore/blob/master/Python.gitignore
 

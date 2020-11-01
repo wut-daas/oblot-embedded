@@ -7,7 +7,7 @@ import struct
 import tkinter as tk
 from tkinter import ttk
 import serial
-from pymavlink.dialects.v20 import archer
+from pymavlink.dialects.v20 import oblot
 from pymavlink import mavutil
 
 from utils import *
@@ -53,11 +53,11 @@ def read_serial():
         if msgs is not None and len(msgs) > 0:
             for msg in msgs:
                 msgId = msg.get_msgId()
-                if msgId == archer.MAVLINK_MSG_ID_ARCHER_HEARTBEAT:
+                if msgId == oblot.MAVLINK_MSG_ID_ARCHER_HEARTBEAT:
                     heartbeat_text.set(heartbeat_format(msg))
-                elif msgId == archer.MAVLINK_MSG_ID_ARCHER_BATTERY:
+                elif msgId == oblot.MAVLINK_MSG_ID_ARCHER_BATTERY:
                     battery_text.set(battery_format(msg))
-                elif msgId == archer.MAVLINK_MSG_ID_PARAM_VALUE:
+                elif msgId == oblot.MAVLINK_MSG_ID_PARAM_VALUE:
                     vstr = struct.pack(">f", msg.param_value)
                     vbyte, = struct.unpack(">xxxB", vstr)
                     print('received {}: {}'.format(msg.param_id, vbyte))
@@ -100,9 +100,9 @@ def connect():
     if not os.path.exists(os.path.join(root_dir, logs_dir)):
         os.makedirs(os.path.join(root_dir, logs_dir), 0o777)
 
-    filename = 'archer-serial-reader-output-' + datetime.now().strftime('%Y%m%dT%H%M%S.bin')
+    filename = 'oblot-serial-reader-output-' + datetime.now().strftime('%Y%m%dT%H%M%S.bin')
     global mav
-    mav = archer.MAVLink(open(os.path.join(root_dir, logs_dir, filename), 'wb'))
+    mav = oblot.MAVLink(open(os.path.join(root_dir, logs_dir, filename), 'wb'))
 
     global root
     root.after(100, read_serial)

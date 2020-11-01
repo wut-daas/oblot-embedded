@@ -3,4 +3,5 @@ future==0.18.2
 lxml==4.6.1
 pymavlink==2.4.12
 pyserial==3.4
+python-dotenv==0.15.0
 requests==2.24.0

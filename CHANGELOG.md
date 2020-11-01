@@ -3,6 +3,11 @@
 Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
+### Added
+- Automatic script to download and install the custom dialect
+
+### Changed
+- Renamed the python dialect module to `oblot` from `archer` to match auto-built Releases
 
 ## [1.1.2] - 2020-11-01
 ### Added
