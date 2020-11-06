@@ -5,6 +5,7 @@ Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en
 ## Unreleased
 ### Added
 - Automatic script to download and install the custom dialect
+- Debugging messages from `common.xml`, including `STATUSTEXT`
 
 ### Changed
 - Renamed the python dialect module to `oblot` from `archer` to match auto-built Releases

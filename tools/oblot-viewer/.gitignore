@@ -1,3 +1,6 @@
+# Logs
+logs/
+
 # Private configuration files
 .env
 

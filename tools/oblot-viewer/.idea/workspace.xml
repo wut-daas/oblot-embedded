@@ -20,10 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51b1c995-7348-45f0-942d-2b9d804cbdb4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +54,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.download_dialect">
     <configuration name="download_dialect" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="oblot-viewer" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -103,8 +101,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main" />
         <item itemvalue="Python.download_dialect" />
+        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -130,7 +128,8 @@
       <workItem from="1601622298233" duration="3951000" />
       <workItem from="1601629517236" duration="1255000" />
       <workItem from="1604229313758" duration="424000" />
-      <workItem from="1604229856808" duration="4528000" />
+      <workItem from="1604229856808" duration="5613000" />
+      <workItem from="1604235553060" duration="19000" />
     </task>
     <servers />
   </component>
@@ -181,25 +180,25 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1601635714159" />
-    <state width="1493" height="204" key="GridCell.Tab.0.bottom" timestamp="1604234409340">
+    <state width="1493" height="204" key="GridCell.Tab.0.bottom" timestamp="1604235542558">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="204" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1604234409340" />
+    <state width="1493" height="204" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1604235542558" />
     <state width="725" height="202" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1601635723359" />
-    <state width="1493" height="204" key="GridCell.Tab.0.center" timestamp="1604234409340">
+    <state width="1493" height="204" key="GridCell.Tab.0.center" timestamp="1604235542558">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="204" key="GridCell.Tab.0.center/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1604234409340" />
+    <state width="1493" height="204" key="GridCell.Tab.0.center/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1604235542558" />
     <state width="725" height="202" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1601635723359" />
-    <state width="1493" height="204" key="GridCell.Tab.0.left" timestamp="1604234409340">
+    <state width="1493" height="204" key="GridCell.Tab.0.left" timestamp="1604235542558">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="204" key="GridCell.Tab.0.left/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1604234409340" />
+    <state width="1493" height="204" key="GridCell.Tab.0.left/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1604235542558" />
     <state width="725" height="202" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1601635723359" />
-    <state width="1493" height="204" key="GridCell.Tab.0.right" timestamp="1604234409340">
+    <state width="1493" height="204" key="GridCell.Tab.0.right" timestamp="1604235542558">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="204" key="GridCell.Tab.0.right/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1604234409340" />
+    <state width="1493" height="204" key="GridCell.Tab.0.right/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1604235542558" />
     <state width="725" height="202" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1601635723359" />
     <state width="724" height="265" key="GridCell.Tab.1.bottom" timestamp="1601629007633">
       <screen x="0" y="0" width="1536" height="824" />
@@ -232,7 +231,7 @@
     <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1604232711589" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/oblot_viewer$main.coverage" NAME="main Coverage Results" MODIFIED="1604234580591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/oblot_viewer$download_dialect.coverage" NAME="download_dialect Coverage Results" MODIFIED="1604234409330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/oblot_viewer$main.coverage" NAME="main Coverage Results" MODIFIED="1604235033940" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/oblot_viewer$download_dialect.coverage" NAME="download_dialect Coverage Results" MODIFIED="1604235197104" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -137,6 +137,34 @@
         <description>Command is valid and is being executed. This will be followed by further progress updates, i.e. the component may send further COMMAND_ACK messages with result MAV_RESULT_IN_PROGRESS (at a rate decided by the implementation), and must terminate by sending a COMMAND_ACK message with final result of the operation. The COMMAND_ACK.progress field can be used to indicate the progress of the operation. There is no need for the sender to retry the command, but if done during execution, the component will return MAV_RESULT_IN_PROGRESS with an updated progress.</description>
       </entry>
     </enum>
+    <!-- Debugging enumerations -->
+    <enum name="MAV_SEVERITY">
+      <description>Indicates the severity level, generally used for status messages to indicate their relative urgency. Based on RFC-5424 using expanded definitions at: http://www.kiwisyslog.com/kb/info:-syslog-message-levels/.</description>
+      <entry value="0" name="MAV_SEVERITY_EMERGENCY">
+        <description>System is unusable. This is a "panic" condition.</description>
+      </entry>
+      <entry value="1" name="MAV_SEVERITY_ALERT">
+        <description>Action should be taken immediately. Indicates error in non-critical systems.</description>
+      </entry>
+      <entry value="2" name="MAV_SEVERITY_CRITICAL">
+        <description>Action must be taken immediately. Indicates failure in a primary system.</description>
+      </entry>
+      <entry value="3" name="MAV_SEVERITY_ERROR">
+        <description>Indicates an error in secondary/redundant systems.</description>
+      </entry>
+      <entry value="4" name="MAV_SEVERITY_WARNING">
+        <description>Indicates about a possible future error if this is not resolved within a given timeframe. Example would be a low battery warning.</description>
+      </entry>
+      <entry value="5" name="MAV_SEVERITY_NOTICE">
+        <description>An unusual event has occurred, though not an error condition. This should be investigated for the root cause.</description>
+      </entry>
+      <entry value="6" name="MAV_SEVERITY_INFO">
+        <description>Normal operational messages. Useful for logging. No action is required for these messages.</description>
+      </entry>
+      <entry value="7" name="MAV_SEVERITY_DEBUG">
+        <description>Useful non-operational messages that can assist in debugging. These should not occur during normal operation.</description>
+      </entry>
+    </enum>
   </enums>
   <messages>
     <!-- Parameter service messages -->
@@ -216,6 +244,48 @@
       <field type="uint8_t" name="target_system">System executing long running command. Should not be broadcast (0).</field>
       <field type="uint8_t" name="target_component">Component executing long running command.</field>
       <field type="uint16_t" name="command" enum="MAV_CMD">Command ID (of command to cancel).</field>
+    </message>
+    <!-- Debugging messages -->
+    <message id="249" name="MEMORY_VECT">
+      <description>Send raw controller memory. The use of this message is discouraged for normal packets, but a quite efficient way for testing new messages and getting experimental debug output.</description>
+      <field type="uint16_t" name="address">Starting address of the debug variables</field>
+      <field type="uint8_t" name="ver">Version code of the type variable. 0=unknown, type ignored and assumed int16_t. 1=as below</field>
+      <field type="uint8_t" name="type">Type code of the memory variables. for ver = 1: 0=16 x int16_t, 1=16 x uint16_t, 2=16 x Q15, 3=16 x 1Q14</field>
+      <field type="int8_t[32]" name="value">Memory contents at specified address</field>
+    </message>
+    <message id="250" name="DEBUG_VECT">
+      <description>To debug something using a named 3D vector.</description>
+      <field type="char[10]" name="name" instance="true">Name</field>
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.</field>
+      <field type="float" name="x">x</field>
+      <field type="float" name="y">y</field>
+      <field type="float" name="z">z</field>
+    </message>
+    <message id="251" name="NAMED_VALUE_FLOAT">
+      <description>Send a key-value pair as float. The use of this message is discouraged for normal packets, but a quite efficient way for testing new messages and getting experimental debug output.</description>
+      <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
+      <field type="char[10]" name="name" instance="true">Name of the debug variable</field>
+      <field type="float" name="value">Floating point value</field>
+    </message>
+    <message id="252" name="NAMED_VALUE_INT">
+      <description>Send a key-value pair as integer. The use of this message is discouraged for normal packets, but a quite efficient way for testing new messages and getting experimental debug output.</description>
+      <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
+      <field type="char[10]" name="name" instance="true">Name of the debug variable</field>
+      <field type="int32_t" name="value">Signed integer value</field>
+    </message>
+    <message id="253" name="STATUSTEXT">
+      <description>Status text message. These messages are printed in yellow in the COMM console of QGroundControl. WARNING: They consume quite some bandwidth, so use only for important status and error messages. If implemented wisely, these messages are buffered on the MCU and sent only at a limited rate (e.g. 10 Hz).</description>
+      <field type="uint8_t" name="severity" enum="MAV_SEVERITY">Severity of status. Relies on the definitions within RFC-5424.</field>
+      <field type="char[50]" name="text">Status text message, without null termination character</field>
+      <extensions/>
+      <field type="uint16_t" name="id">Unique (opaque) identifier for this statustext message.  May be used to reassemble a logical long-statustext message from a sequence of chunks.  A value of zero indicates this is the only chunk in the sequence and the message can be emitted immediately.</field>
+      <field type="uint8_t" name="chunk_seq">This chunk's sequence number; indexing is from zero.  Any null character in the text field is taken to mean this was the last chunk.</field>
+    </message>
+    <message id="254" name="DEBUG">
+      <description>Send a debug value. The index is used to discriminate between values. These values show up in the plot of QGroundControl as DEBUG N.</description>
+      <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
+      <field type="uint8_t" name="ind">index of debug variable</field>
+      <field type="float" name="value">DEBUG value</field>
     </message>
   </messages>
 </mavlink>
