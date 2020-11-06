@@ -3,6 +3,8 @@
 Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
+
+## [1.1.3] - 2020-11-06
 ### Added
 - Automatic script to download and install the custom dialect
 - Debugging messages from `common.xml`, including `STATUSTEXT`
@@ -24,5 +26,6 @@ Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en
 - Zipped include folders for C
 - Message and command to handle dynamometric station
 
+[1.1.3]: https://gitlab.com/wut-daas/oblot-embedded/-/releases/1.1.3
 [1.1.2]: https://gitlab.com/wut-daas/oblot-embedded/-/releases/1.1.2
 [1.1.0]: https://gitlab.com/wut-daas/oblot-embedded/-/releases/1.1.0

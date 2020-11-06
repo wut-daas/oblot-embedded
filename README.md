@@ -29,3 +29,5 @@ from pymavlink.dialects.v20 import oblot
 
 mav = oblot.MAVLink(open('path-to-raw-log-file.bin', 'wb'))
 ```
+
+After [creating a Gitlab access token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#creating-a-personal-access-token) with `read_api` scope, [this script](tools/oblot-viewer/download_dialect.py) can be used to download and install the latest module.
