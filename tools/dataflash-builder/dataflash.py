@@ -1,5 +1,6 @@
 import time
 import struct
+import typing
 
 
 class Dataflash:
@@ -29,11 +30,17 @@ class Dataflash:
     PACKED = ['b', 'B', 'h', 'H', 'i', 'I', 'f', 'd', 'L', 'q', 'Q']
     TEXT = ['n', 'N', 'Z']
 
-    def __init__(self, output_buffer):
+    def __init__(self, output_buffer: typing.BinaryIO):
+        """Create a logger holding message types and writing data
+
+        Parameters
+        ----------
+        output_buffer : typing.BinaryIO
+            A file-like object to write the binary data into
+        """
         self.start_time = time.perf_counter_ns()
         self.output_buffer = output_buffer
-        # Ardupilot uses 0-63 for vehicle specific, 64 and up for common, where 128 must be FMT
-        self.next_msg_id = 1
+        self.next_msg_id = 1  # Ardupilot uses 0-63 for vehicle specific, 64 and up for common, where 128 must be FMT
         self.max_msg_id = 127  # inclusive
         self.msg_defs = [
             # These are the basic messages from LogFormat that will need to be in virtually every application
@@ -114,7 +121,30 @@ class Dataflash:
             {'id': '/', 'multiplier': 3600},  # (ampere*second => ampere*hour)
         ]
 
-    def add_message(self, name, fields, labels, units=None, multipliers=None):
+    def add_message(self, name: str, fields: str, labels: str,
+                    units: typing.Optional[str] = None, multipliers: typing.Optional[str] = None) -> int:
+        """Add and validate a message for logging
+
+        Parameters
+        ----------
+        name : str
+            Name for the message. Must be unique and not longer than 4 characters.
+            By convention use uppercase letters and numbers
+        fields : str
+            Message field types defined in `Dataflash.BYTESIZE`. Cannot be longer than 16 characters.
+            By convention make the first field TimeUS containing time from start of the system.
+        labels : str
+            Comma-separated list of field names. Cannot be longer than 64 characters.
+        units : typing.Optional[str], optional
+            Units for each field corresponding to a UNIT message, by default None
+        multipliers : typing.Optional[str], optional
+            Multipliers for each field corresponding to a MULT message, by default None
+
+        Returns
+        -------
+        int
+            Number of message ids left to assign
+        """
         msg_id = self.next_msg_id
         self.next_msg_id += 1
         if self.next_msg_id > self.max_msg_id:
@@ -139,9 +169,22 @@ class Dataflash:
             msg_def['multipliers'] = multipliers
 
         self.msg_defs.append(msg_def)
+        return self.max_msg_id - self.next_msg_id
 
     @staticmethod
-    def msg_len(fields):
+    def msg_len(fields: str) -> int:
+        """Get message length
+
+        Parameters
+        ----------
+        fields : str
+            String of fields corresponding to a FMT message
+
+        Returns
+        -------
+        int
+            Length of the message in bytes
+        """
         res = 2 + 1  # header + id
         for char in fields:
             if char in Dataflash.BYTESIZE:
@@ -151,11 +194,37 @@ class Dataflash:
         return res
 
     @staticmethod
-    def encode_and_pad(text, length):
+    def encode_and_pad(text: str, length: int) -> bytes:
+        """Get a fixed length ascii-encoded bytes array
+
+        Parameters
+        ----------
+        text : str
+            Text to encode
+        length : int
+            Length of returned bytes object
+
+        Returns
+        -------
+        bytes
+            Containing encoded text padded with zero bytes up to length
+        """
         content = text.encode('ascii')
         return content + b'\0' * (length - len(content))
 
-    def pack_message(self, name, *fields):
+    def pack_message(self, name: str, *fields) -> bytes:
+        """Pack an already defined message into bytes
+
+        Parameters
+        ----------
+        name : str
+            Name of the message as defined in `add_message`
+
+        Returns
+        -------
+        bytearray
+            Bytes to write to file
+        """
         msg_def = next((msg for msg in self.msg_defs if msg['name'] == name), None)
         if msg_def is None:
             raise RuntimeError(f'Message definition for {name} not found')
@@ -176,12 +245,21 @@ class Dataflash:
                 raise NotImplementedError(f'Type of field {msg_def["fields"][index]} not handled by pack_message')
             offset += length
 
-        return bytearray(result)
+        return bytes(result)
 
-    def time_us(self):
+    def time_us(self) -> int:
+        """Get time from initialisation of the logger
+
+        Returns
+        -------
+        int
+            Time from initialising logger in microseconds
+        """
         return int((time.perf_counter_ns() - self.start_time) / 1000)
 
     def write_header(self):
+        """Write information about the defined messages into the `output_buffer`
+        """
         for msg in self.msg_defs:
             self.output_buffer.write(self.pack_message('FMT', msg['id'], self.msg_len(msg['fields']),
                                                        msg['name'], msg['fields'], msg['labels']))
@@ -189,7 +267,7 @@ class Dataflash:
             self.output_buffer.write(self.pack_message('UNIT', self.time_us(), ord(unit['id']), unit['unit']))
         for mult in self.mult_defs:
             self.output_buffer.write(self.pack_message('MULT', self.time_us(), ord(mult['id']), mult['multiplier']))
-        for msg in self.msg_defs:
+        for msg in filter(lambda md: 'units' in md and 'multipliers' in md, self.msg_defs):
             self.output_buffer.write(self.pack_message('FMTU', self.time_us(), msg['id'],
                                                        msg['units'], msg['multipliers']))
 

@@ -6,10 +6,14 @@ Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en
 ### Added
 - DataFlash messages `ERR`, `MAVC`
 - Documentation comments for Ardupilot messages
+- Type hints and Numpy style docstring for all methods in Dataflash
 
 ### Changed
 - Assign consecutive DataFlash message ids
 - Using `float` instead of `double` in demo script
+
+### Fixed
+- Handling of unitless DataFlash messages by `write_header`
 
 ## [1.1.3] - 2020-11-06
 ### Added
