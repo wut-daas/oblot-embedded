@@ -13,7 +13,7 @@ class Dataflash:
         'i': 4,  # int32_t
         'I': 4,  # uint32_t
         'f': 4,  # float
-        'd': 8,  # double
+        'd': 8,  # double (some online services don't support it)
         'n': 4,  # char[4]
         'N': 16,  # char[16]
         'Z': 64,  # char[64]
@@ -32,21 +32,29 @@ class Dataflash:
     def __init__(self, output_buffer):
         self.start_time = time.perf_counter_ns()
         self.output_buffer = output_buffer
-        self.next_msg_id = 101
-        self.max_msg_id = 126  # inclusive
+        # Ardupilot uses 0-63 for vehicle specific, 64 and up for common, where 128 must be FMT
+        self.next_msg_id = 1
+        self.max_msg_id = 127  # inclusive
         self.msg_defs = [
+            # These are the basic messages from LogFormat that will need to be in virtually every application
+            # See documentation comments at end of file
             {'id': 128, 'name': 'FMT', 'fields': 'BBnNZ', 'labels': 'Type,Length,Name,Format,Columns',
              'units': '-b---', 'multipliers': '-----'},
-            {'id': 219, 'name': 'UNIT', 'fields': 'QbZ', 'labels': 'TimeUS,Id,Label',
+            {'id': 129, 'name': 'UNIT', 'fields': 'QbZ', 'labels': 'TimeUS,Id,Label',
              'units': 's--', 'multipliers': 'F--'},
-            {'id': 218, 'name': 'FMTU', 'fields': 'QBNN', 'labels': 'TimeUS,FmtType,UnitIds,MultIds',
+            {'id': 130, 'name': 'FMTU', 'fields': 'QBNN', 'labels': 'TimeUS,FmtType,UnitIds,MultIds',
              'units': 's---', 'multipliers': 'F---'},
-            {'id': 220, 'name': 'MULT', 'fields': 'Qbd', 'labels': 'TimeUS,Id,Mult',
+            {'id': 131, 'name': 'MULT', 'fields': 'Qbd', 'labels': 'TimeUS,Id,Mult',
              'units': 's--', 'multipliers': 'F--'},
-            {'id': 129, 'name': 'PARM', 'fields': 'QNf', 'labels': 'TimeUS,Name,Value',
+            {'id': 132, 'name': 'PARM', 'fields': 'QNf', 'labels': 'TimeUS,Name,Value',
              'units': 's--', 'multipliers': 'F--'},
-            {'id': 134, 'name': 'MSG', 'fields': 'QZ', 'labels': 'TimeUS,Message',
+            {'id': 133, 'name': 'MSG', 'fields': 'QZ', 'labels': 'TimeUS,Message',
              'units': 's-', 'multipliers': 'F-'},
+            {'id': 134, 'name': 'ERR', 'fields': 'QBB', 'labels': 'TimeUS,Subsys,ECode',
+             'units': 's--', 'multipliers': 'F--'},
+            {'id': 135, 'name': 'MAVC', 'fields': 'QBBBHBBffffiifBB',
+             'labels': 'TimeUS,TS,TC,Fr,Cmd,Cur,AC,P1,P2,P3,P4,X,Y,Z,Res,WL',
+             'units': 's---------------', 'multipliers': 'F---------------'},
         ]
         self.unit_defs = [
             {'id': '-', 'unit': ''},  # no units e.g. Pi, or a string
@@ -184,3 +192,67 @@ class Dataflash:
         for msg in self.msg_defs:
             self.output_buffer.write(self.pack_message('FMTU', self.time_us(), msg['id'],
                                                        msg['units'], msg['multipliers']))
+
+# @LoggerMessage: FMT
+# @Description: Message defining the format of messages in this file
+# @URL: https://ardupilot.org/dev/docs/code-overview-adding-a-new-log-message.html
+# @Field: Type: unique-to-this-log identifier for message being defined
+# @Field: Length: the number of bytes taken up by this message (including all headers)
+# @Field: Name: name of the message being defined
+# @Field: Format: character string defining the C-storage-type of the fields in this message
+# @Field: Columns: the labels of the message being defined
+
+# @LoggerMessage: UNIT
+# @Description: Message mapping from single character to SI unit
+# @Field: TimeUS: Time since system startup
+# @Field: Id: character referenced by FMTU
+# @Field: Label: Unit - SI where available
+
+# @LoggerMessage: FMTU
+# @Description: Message defining units and multipliers used for fields of other messages
+# @Field: TimeUS: Time since system startup
+# @Field: FmtType: numeric reference to associated FMT message
+# @Field: UnitIds: each character refers to a UNIT message. The unit at an offset corresponds to the field at the same offset in FMT.Format
+# @Field: MultIds: each character refers to a MULT message. The multiplier at an offset corresponds to the field at the same offset in FMT.Format
+
+# @LoggerMessage: MULT
+# @Description: Message mapping from single character to numeric multiplier
+# @Field: TimeUS: Time since system startup
+# @Field: Id: character referenced by FMTU
+# @Field: Mult: numeric multiplier
+
+# @LoggerMessage: PARM
+# @Description: parameter value
+# @Field: TimeUS: Time since system startup
+# @Field: Name: parameter name
+# @Field: Value: parameter vlaue
+
+# @LoggerMessage: MSG
+# @Description: Textual messages
+# @Field: TimeUS: Time since system startup
+# @Field: Message: message text
+
+# @LoggerMessage: ERR
+# @Description: Specifically coded error messages
+# @Field: TimeUS: Time since system startup
+# @Field: Subsys: Subsystem in which the error occurred
+# @Field: ECode: Subsystem-specific error code
+
+# @LoggerMessage: MAVC
+# @Description: MAVLink command we have just executed
+# @Field: TimeUS: Time since system startup
+# @Field: TS: target system for command
+# @Field: TC: target component for command
+# @Field: Fr: command frame
+# @Field: Cmd: mavlink command enum value
+# @Field: Cur: current flag from mavlink packet
+# @Field: AC: autocontinue flag from mavlink packet
+# @Field: P1: first parameter from mavlink packet
+# @Field: P2: second parameter from mavlink packet
+# @Field: P3: third parameter from mavlink packet
+# @Field: P4: fourth parameter from mavlink packet
+# @Field: X: X coordinate from mavlink packet
+# @Field: Y: Y coordinate from mavlink packet
+# @Field: Z: Z coordinate from mavlink packet
+# @Field: Res: command result being returned from autopilot
+# @Field: WL: true if this command arrived via a COMMAND_LONG rather than COMMAND_INT

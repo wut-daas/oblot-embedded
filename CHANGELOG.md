@@ -3,6 +3,13 @@
 Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
+### Added
+- DataFlash messages `ERR`, `MAVC`
+- Documentation comments for Ardupilot messages
+
+### Changed
+- Assign consecutive DataFlash message ids
+- Using `float` instead of `double` in demo script
 
 ## [1.1.3] - 2020-11-06
 ### Added

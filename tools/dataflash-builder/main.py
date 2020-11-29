@@ -13,7 +13,7 @@ def main():
     filename = 'output.bin'
     with open(os.path.join(root_dir, out_dir, filename), 'wb') as fout:
         df = Dataflash(fout)
-        df.add_message('SINE', 'Qd', 'TimeUS,Sine', units='s-', multipliers='F?')
+        df.add_message('SINE', 'Qf', 'TimeUS,Sine', units='s-', multipliers='F?')
         df.write_header()
         start = df.time_us()
         for i in range(200):
