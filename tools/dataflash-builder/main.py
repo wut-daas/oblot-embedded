@@ -2,6 +2,7 @@ import os
 import math
 
 from dataflash import Dataflash
+from df_kaitaistruct import write_ksy
 
 
 def main():
@@ -15,6 +16,7 @@ def main():
         df = Dataflash(fout)
         df.add_message('SINE', 'Qf', 'TimeUS,Sine', units='s-', multipliers='F?')
         df.write_header()
+        write_ksy(df.msg_defs)
         start = df.time_us()
         for i in range(200):
             fout.write(df.pack_message('SINE', start + i*int(1e6), math.sin(float(i)/10.0)))

@@ -7,6 +7,7 @@ Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en
 - DataFlash messages `ERR`, `MAVC`
 - Documentation comments for Ardupilot messages
 - Type hints and Numpy style docstring for all methods in Dataflash
+- Script for creating Kaitai Struct definition
 
 ### Changed
 - Assign consecutive DataFlash message ids
