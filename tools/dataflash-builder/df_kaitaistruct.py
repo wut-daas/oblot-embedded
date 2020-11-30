@@ -22,11 +22,11 @@ types:
           cases:
 '''
 
-end = '''  msg_unknown:
+msg_unknown_def = '''  msg_unknown:
     seq:
       - id: body
         type: u1
-        repeat: eos # multibyte terminators are not currently supported in kaitai struct'''
+        repeat: eos # multibyte terminators not supported'''
 
 typedefs = {
     'a': 's2\n        repeat: expr\n        repeat-expr: 32',  # int16_t[32]
@@ -52,15 +52,18 @@ typedefs = {
 }
 
 
-def write_ksy(msg_defs: dict, filename: typing.Optional[str] = None):
-    """Writes a Kaitai Struct format description to specified ksy file. See https://kaitai.io/ for more details
+def write_ksy(msg_defs: dict, filename: typing.Optional[str] = None, allow_unknown: bool = False):
+    """Writes a Kaitai Struct format description to specified .ksy file. See https://kaitai.io/ for more details
 
     Parameters
     ----------
     msg_defs : dict
-        Dictionary of message definitions as defined in Dataflash.msg_defs
+        Dictionary of message definitions as defined in `Dataflash.msg_defs`
     filename : typing.Optional[str], optional
-        Filename of ksy file to write into, by default None saves to 'out/ap_dataflash.ksy'
+        Filename of .ksy file to write into, by default None saves to ``out/ap_dataflash.ksy``
+    allow_unknown : bool
+        Include a `msg_unknown_def` definition which will consume bytes until end of file but prevent errors.
+        It should be done with a magic terminator, but Kaitai Struct does not support it currently (Issue #158).
     """
     if filename is None:
         out_dir = 'out'
@@ -74,10 +77,12 @@ def write_ksy(msg_defs: dict, filename: typing.Optional[str] = None):
         fout.write(start)
         for msg in msg_defs:
             fout.write(f'            {msg["id"]}: {msg["name"].lower()}\n')
-        fout.write('            _: msg_unknown\n')
+        if allow_unknown:
+            fout.write('            _: msg_unknown\n')
         for msg in msg_defs:
             fout.write(f'  {msg["name"].lower()}:\n    seq:\n')
             labels = msg['labels'].lower().split(',')
             for i, field in enumerate(msg['fields']):
                 fout.write(f'      - id: {labels[i]}\n        type: {typedefs[field]}\n')
-        fout.write(end)
+        if allow_unknown:
+            fout.write(msg_unknown_def)
