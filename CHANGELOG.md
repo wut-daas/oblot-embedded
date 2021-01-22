@@ -10,8 +10,13 @@ Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en
 - Script for creating Kaitai Struct definition
 
 ### Changed
+- Migrated repository to Github
+- Automatic download of releases from Github, no API key required
 - Assign consecutive DataFlash message ids
 - Using `float` instead of `double` in demo script
+
+### Removed
+- Automatic releasing through Gitlab CI
 
 ### Fixed
 - Handling of unitless DataFlash messages by `write_header`
