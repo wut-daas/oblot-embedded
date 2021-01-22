@@ -21,26 +21,27 @@ jobs:
         python-version: 3.9
     - name: Install dependencies
       run: |
-        apt-get -y install zip
+        sudo apt-get -y install zip
         python -m pip install --upgrade pip
         pip install future lxml
         mkdir repos
         cd repos
         git clone https://github.com/mavlink/mavlink.git --recursive
-        export PYTHONPATH=${PWD}/mavlink
         cd ..
     - name: Generate
       run: |
+        export PYTHONPATH=${PWD}/repos/mavlink
         mkdir output
         cd output
         # Generate Python
-        python -m pymavlink.tools.mavgen -o ./${DIALECT_NAME}.py --lang=Python --wire-protocol=2.0 --strict-units mavlink/message_definitions/v2.0/oblot.xml
+        python -m pymavlink.tools.mavgen -o ./${DIALECT_NAME}.py --lang=Python --wire-protocol=2.0 --strict-units ../mavlink/message_definitions/v2.0/oblot.xml
         # Generate C
-        python -m pymavlink.tools.mavgen -o ./include/mavlink --lang=C --wire-protocol=2.0 --strict-units mavlink/message_definitions/v2.0/oblot.xml
+        python -m pymavlink.tools.mavgen -o ./include/mavlink --lang=C --wire-protocol=2.0 --strict-units ../mavlink/message_definitions/v2.0/oblot.xml
         # Generate TypeScript
-        python -m pymavlink.tools.mavgen -o ./assets/mavlink --lang=TypeScript --wire-protocol=2.0 --strict-units mavlink/message_definitions/v2.0/oblot.xml
+        mkdir -p assets/mavlink  # This generator errors when creating directories
+        python -m pymavlink.tools.mavgen -o ./assets/mavlink --lang=TypeScript --wire-protocol=2.0 --strict-units ../mavlink/message_definitions/v2.0/oblot.xml
         # Change npm package to TypeScript supporting version
-        grep -rl "'node-mavlink'" . | xargs sed -i 's/'node-mavlink'/'@ifrunistuttgart/node-mavlink'/g'
+        grep -rl "node-mavlink" . | xargs sed -i 's:node-mavlink:@ifrunistuttgart/node-mavlink:g'
         cd ..
     - name: Pack output
       run: |
