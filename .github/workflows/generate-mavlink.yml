@@ -54,5 +54,5 @@ jobs:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
         files: |
-          output/${DIALECT_NAME}.py
+          output/${{ env.DIALECT_NAME }}.py
           output/*.zip
