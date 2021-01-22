@@ -29,3 +29,8 @@ mav = oblot.MAVLink(open('path-to-raw-log-file.bin', 'wb'))
 ```
 
 [This script](tools/oblot-viewer/download_dialect.py) can be used to download and install the latest module in currently used Python environment.
+
+### TypeScript
+
+All instances of `'node-mavlink'` in the generated files are replaced with `'@ifrunistuttgart/node-mavlink'`.
+This is the package needed to actually support MAVLink 2 and TypeScript.
