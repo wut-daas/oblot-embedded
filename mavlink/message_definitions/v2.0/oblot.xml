@@ -11,7 +11,7 @@
   <enums>
     <enum name="MAV_CMD">
       <description>Commands to be executed by the MAV. They can be executed on user request, or as part of a mission script. If the action is used in a mission, the parameter mapping to the waypoint/mission message is as follows: Param 1, Param 2, Param 3, Param 4, X: Param 5, Y:Param 6, Z:Param 7. This command list is similar what ARINC 424 is for commercial aircraft: A data format how to interpret waypoint/mission data.</description>
-      <!-- For clarity, do not repeat ids betweend commands and messages -->
+      <!-- For clarity, do not repeat ids between commands and messages -->
       <entry value="44101" name="MAV_CMD_DO_DYNO_TARE" hasLocation="false" isDestination="false">
         <description>Set zero force offset either to current reading or a specified value</description>
         <param index="1" label="Use Current" minValue="0" maxValue="1" increment="1">Measure and use current value (1=use current reading, 0=use specified value)</param>

@@ -2,7 +2,7 @@
 
 Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## Unreleased
+## [v1.2.0] - 2021-01-22
 ### Added
 - DataFlash messages `ERR`, `MAVC`
 - Documentation comments for Ardupilot messages
@@ -10,6 +10,7 @@ Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en
 - Script for creating Kaitai Struct definition
 
 ### Changed
+- Released version names starting with a `v`
 - Migrated repository to Github
 - Automatic download of releases from Github, no API key required
 - Assign consecutive DataFlash message ids
@@ -43,6 +44,5 @@ Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en
 - Zipped include folders for C
 - Message and command to handle dynamometric station
 
-[1.1.3]: https://gitlab.com/wut-daas/oblot-embedded/-/releases/1.1.3
-[1.1.2]: https://gitlab.com/wut-daas/oblot-embedded/-/releases/1.1.2
-[1.1.0]: https://gitlab.com/wut-daas/oblot-embedded/-/releases/1.1.0
+[1.2.0]: https://github.com/wut-daas/oblot-embedded/releases/tag/v1.2.0
+[1.1.3]: https://github.com/wut-daas/oblot-embedded/releases/tag/1.1.3
