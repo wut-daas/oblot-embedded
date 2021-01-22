@@ -1,0 +1,57 @@
+# Install Python dependencies and generate various sets of functions for MAVLink dialect
+name: Generate and release MAVLink
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  tagged-release:
+
+    runs-on: ubuntu-latest
+    env:
+      DIALECT_NAME: "oblot"
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        apt-get -y install zip
+        python -m pip install --upgrade pip
+        pip install future lxml
+        mkdir repos
+        cd repos
+        git clone https://github.com/mavlink/mavlink.git --recursive
+        export PYTHONPATH=${PWD}/mavlink
+        cd ..
+    - name: Generate
+      run: |
+        mkdir output
+        cd output
+        # Generate Python
+        python -m pymavlink.tools.mavgen -o ./${DIALECT_NAME}.py --lang=Python --wire-protocol=2.0 --strict-units mavlink/message_definitions/v2.0/oblot.xml
+        # Generate C
+        python -m pymavlink.tools.mavgen -o ./include/mavlink --lang=C --wire-protocol=2.0 --strict-units mavlink/message_definitions/v2.0/oblot.xml
+        # Generate TypeScript
+        python -m pymavlink.tools.mavgen -o ./assets/mavlink --lang=TypeScript --wire-protocol=2.0 --strict-units mavlink/message_definitions/v2.0/oblot.xml
+        # Change npm package to TypeScript supporting version
+        grep -rl "'node-mavlink'" . | xargs sed -i 's/'node-mavlink'/'@ifrunistuttgart/node-mavlink'/g'
+        cd ..
+    - name: Pack output
+      run: |
+        cd output  # to have correct paths inside zip
+        zip -r mavlink-${DIALECT_NAME}-c.zip include/
+        zip -r mavlink-${DIALECT_NAME}-ts.zip assets/
+        cd ..
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
+        files: |
+          output/${DIALECT_NAME}.py
+          output/*.zip
