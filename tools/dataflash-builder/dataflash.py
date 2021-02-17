@@ -46,7 +46,7 @@ class Dataflash:
             # These are the basic messages from LogFormat that will need to be in virtually every application
             # See documentation comments at end of file
             {'id': 128, 'name': 'FMT', 'fields': 'BBnNZ', 'labels': 'Type,Length,Name,Format,Columns',
-             'units': '-b---', 'multipliers': '-----'},
+             'units': '-b---', 'multipliers': '-----'},  # FMT must be first, see parse_msg_defs
             {'id': 129, 'name': 'UNIT', 'fields': 'QbZ', 'labels': 'TimeUS,Id,Label',
              'units': 's--', 'multipliers': 'F--'},
             {'id': 130, 'name': 'FMTU', 'fields': 'QBNN', 'labels': 'TimeUS,FmtType,UnitIds,MultIds',
@@ -270,6 +270,72 @@ class Dataflash:
         for msg in filter(lambda md: 'units' in md and 'multipliers' in md, self.msg_defs):
             self.output_buffer.write(self.pack_message('FMTU', self.time_us(), msg['id'],
                                                        msg['units'], msg['multipliers']))
+
+    def parse_msg_defs(self, input: typing.BinaryIO) -> list:
+        """Get message definitions used in a log file
+
+        Parameters
+        ----------
+        input : typing.BinaryIO
+            Dataflash log file-like object to parse
+
+        Returns
+        -------
+        list
+            List of dictionaries in the same format as `Dataflash.msg_defs`
+        """
+        defs = []  # clear definitions to prevent id clashes
+        lengths = {}
+        fmt_def = self.msg_defs[0]  # FMT must always be first there
+        fmt_len = Dataflash.msg_len(fmt_def['fields'])
+
+        while input.readable():  # FIXME: This setup with IndexError fails after parsing all FMT, so is fine for now
+            msg_start = input.peek(3)
+            msg_id = 0
+            try:
+                msg_id = msg_start[2]
+            except IndexError:
+                break
+            if msg_id == fmt_def['id']:
+                fmt_buffer = input.read(fmt_len)
+                fields = Dataflash.parse_fields(fmt_buffer[3:], fmt_def['fields'])
+                defs.append({
+                    'id': fields[0], 'name': fields[2], 'fields': fields[3], 'labels': fields[4]
+                })  # length is unused in msg_defs
+                lengths[fields[0]] = fields[1]
+            elif msg_id in lengths.keys():
+                input.read(lengths[msg_id])
+            else:
+                raise RuntimeError(f'Unknown message id {msg_id}')
+
+        return defs
+
+    @staticmethod
+    def parse_fields(buffer: bytes, fields: str) -> list:
+        """Parse message payload
+
+        Parameters
+        ----------
+        buffer : bytes
+            Message payload (without the HEADER and id)
+        fields : str
+            Fields as defined in FMT
+
+        Returns
+        -------
+        list
+            Parsed fields in their Python types
+        """
+        offset = 0
+        result = []
+        for field in fields:
+            length = Dataflash.BYTESIZE[field]
+            if field in Dataflash.TEXT:
+                result.append(buffer[offset:offset + length].decode('ascii').replace('\x00', ''))
+            if field in Dataflash.PACKED:
+                result.append(struct.unpack('<' + field, buffer[offset:offset + length])[0])
+            offset += length
+        return result
 
 # @LoggerMessage: FMT
 # @Description: Message defining the format of messages in this file

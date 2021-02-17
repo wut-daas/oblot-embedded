@@ -5,6 +5,7 @@ Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en
 ## Unreleased
 ### Added
 - Assign component ids from private user range
+- Parsing message definitions from a binary DataFlash log
 
 ## [v1.2.0] - 2021-01-22
 ### Added
