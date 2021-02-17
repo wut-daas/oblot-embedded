@@ -3,6 +3,8 @@
 Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
+### Added
+- Assign component ids from private user range
 
 ## [v1.2.0] - 2021-01-22
 ### Added

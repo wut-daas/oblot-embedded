@@ -265,14 +265,14 @@
         <description>System flight controller component ("autopilot"). Only one autopilot is expected in a particular system.</description>
       </entry>
       <!-- Component ids from 25-99 are reserved for private OEM component definitions (and may be incompatible with other private components). Note that if this range is later reduced, higher ids will be reallocated first. -->
-      <entry value="25" name="MAV_COMP_ID_USER1">
-        <description>Id for a component on privately managed MAVLink network. Can be used for any purpose but may not be published by components outside of the private network.</description>
+      <entry value="25" name="MAV_COMP_ID_ARCHER_POWERBOARD">
+        <description>ARCHER compound helicopter power distribution and monitoring board.</description>
       </entry>
-      <entry value="26" name="MAV_COMP_ID_USER2">
-        <description>Id for a component on privately managed MAVLink network. Can be used for any purpose but may not be published by components outside of the private network.</description>
+      <entry value="26" name="MAV_COMP_ID_ARCHER_MAINBOARD">
+        <description>ARCHER compound helicopter main control board.</description>
       </entry>
-      <entry value="27" name="MAV_COMP_ID_USER3">
-        <description>Id for a component on privately managed MAVLink network. Can be used for any purpose but may not be published by components outside of the private network.</description>
+      <entry value="27" name="MAV_COMP_ID_OBLOT_DYNO">
+        <description>OBLOT research centre propulsion dyno controller.</description>
       </entry>
       <entry value="28" name="MAV_COMP_ID_USER4">
         <description>Id for a component on privately managed MAVLink network. Can be used for any purpose but may not be published by components outside of the private network.</description>
