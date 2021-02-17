@@ -3,9 +3,14 @@
 Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
+
+## [v1.2.1] - 2021-02-17
 ### Added
 - Assign component ids from private user range
 - Parsing message definitions from a binary DataFlash log
+
+### Removed
+- GitLab CI config
 
 ## [v1.2.0] - 2021-01-22
 ### Added
@@ -51,5 +56,6 @@ Use semantic versioning, follow [Keep a Changelog](https://keepachangelog.com/en
 - Zipped include folders for C
 - Message and command to handle dynamometric station
 
+[v1.2.1]: https://github.com/wut-daas/oblot-embedded/releases/tag/v1.2.1
 [v1.2.0]: https://github.com/wut-daas/oblot-embedded/releases/tag/v1.2.0
 [1.1.3]: https://github.com/wut-daas/oblot-embedded/releases/tag/1.1.3
